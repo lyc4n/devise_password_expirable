@@ -30,4 +30,3 @@ Devise.add_module :password_expirable, :controller => :password_expirable, :mode
 # requires
 require 'devise_password_expirable/routes'
 require 'devise_password_expirable/rails'
-require 'devise_password_expirable/orm/active_record'

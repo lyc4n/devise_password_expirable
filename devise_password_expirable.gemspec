@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{Expire passwords plugin for devise}
   s.description = "An extension to devise that will expire user passwords after a set amount of time and prompt them to update their password."
 
-  s.rubyforge_project = "devise_password_expirable"
+  # s.rubyforge_project = "devise_password_expirable"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
