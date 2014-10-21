@@ -1,0 +1,9 @@
+en:
+  errors:
+    messages:
+      equal_to_current_password: "must be different to the current password!"
+      password_format: "must contain at least 1 uppercase letter, 1 lowercase letter, and a number."
+  devise:
+    password_expired:
+      updated: "Your new password is saved."
+      change_required: "Your password is expired. Please renew your password!"
