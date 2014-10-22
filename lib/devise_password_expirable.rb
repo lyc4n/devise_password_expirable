@@ -1,11 +1,12 @@
 require 'devise_password_expirable/version'
-require 'active_record'
+require 'active_record/connection_adapters/abstract/schema_definitions'
 require 'active_support/core_ext/integer'
 require 'active_support/ordered_hash'
 require 'active_support/concern'
 require 'devise'
 
-module Devise
+module Devise # :nodoc:
+  
   # Should the password expire (e.g 3.months)
   mattr_accessor :expire_password_after
   @@expire_password_after = 3.months
@@ -30,3 +31,4 @@ Devise.add_module :password_expirable, :controller => :password_expirable, :mode
 # requires
 require 'devise_password_expirable/routes'
 require 'devise_password_expirable/rails'
+require 'devise_password_expirable/orm/active_record'

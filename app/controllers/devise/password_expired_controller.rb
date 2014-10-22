@@ -1,31 +1,29 @@
-class Devise::PasswordExpiredController < DeviseController
+class Devise::PasswordExpiredController < ApplicationController
   skip_before_filter :handle_password_change
   prepend_before_filter :authenticate_scope!, :only => [:show, :update]
+  include Devise::Controllers::InternalHelpers
 
   def show
     if not resource.nil? and resource.need_change_password?
-      respond_with(resource)
+      render_with_scope :show
     else
       redirect_to :root
     end
   end
 
   def update
-    if resource.update_with_password(resource_params)
+    if resource.update_with_password(params[resource_name])
       warden.session(scope)[:password_expired] = false
       set_flash_message :notice, :updated
-      sign_in scope, resource, :bypass => true
+      sign_in scope, resource
       redirect_to stored_location_for(scope) || :root
     else
       clean_up_passwords(resource)
-      respond_with(resource, :action => :show)
+      render_with_scope :show
     end
   end
 
   private
-    def resource_params
-      params.require(resource_name).permit!
-    end
 
   def scope
     resource_name.to_sym

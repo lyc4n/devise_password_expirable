@@ -1,6 +1,6 @@
 module DevisePasswordExpirable
-  module Controllers
-    module Helpers
+  module Controllers # :nodoc:
+    module Helpers # :nodoc:
       extend ActiveSupport::Concern
 
       included do
@@ -8,14 +8,14 @@ module DevisePasswordExpirable
       end
 
       # controller instance methods
-
+      module InstanceMethods
         private
 
         # lookup if an password change needed
         def handle_password_change
           if not devise_controller? and not ignore_password_expire? and not request.format.nil? and request.format.html?
             Devise.mappings.keys.flatten.any? do |scope|
-              if signed_in?(scope) and warden.session(scope)['password_expired']
+              if signed_in?(scope) and warden.session(scope)[:password_expired]
                 session["#{scope}_return_to"] = request.path if request.get?
                 redirect_for_password_change scope
                 return
@@ -43,7 +43,7 @@ module DevisePasswordExpirable
           false
         end
 
-
+      end
     end
   end
 

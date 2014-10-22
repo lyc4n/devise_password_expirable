@@ -1,57 +1,63 @@
-require 'devise_password_expirable/hooks/password_expirable'
+require 'devise_security_extension/hooks/password_expirable'
 
-module Devise
-  module Models
+module Devise # :nodoc:
+  module Models # :nodoc:
 
     # PasswordExpirable takes care of change password after
     module PasswordExpirable
-      extend ActiveSupport::Concern
 
-      included do
-        before_save :update_password_changed
-      end
+      def self.included(base) # :nodoc:
+        base.extend ClassMethods
 
-      # is an password change required?
-      def need_change_password?
-        if self.class.expire_password_after.is_a? Fixnum or self.class.expire_password_after.is_a? Float
-          self.last_password_reset.nil? or self.last_password_reset < self.class.expire_password_after.ago
-        else
-          false
+        base.class_eval do
+          before_save :update_password_changed
+          include InstanceMethods
         end
       end
 
-      # set a fake datetime so a password change is needed and save the record
-      def need_change_password!
-        if self.class.expire_password_after.is_a? Fixnum or self.class.expire_password_after.is_a? Float
-          need_change_password
-          self.save(:validate => false)
-        end
-      end
+      module InstanceMethods # :nodoc:
 
-      # set a fake datetime so a password change is needed
-      def need_change_password
-        if self.class.expire_password_after.is_a? Fixnum or self.class.expire_password_after.is_a? Float
-          self.last_password_reset = self.class.expire_password_after.ago
+        # is an password change required?
+        def need_change_password?
+          if self.class.expire_password_after.is_a? Fixnum
+            self.last_password_reset.nil? or self.last_password_reset < self.class.expire_password_after.ago
+          else
+            false
+          end
         end
 
-        # is date not set it will set default to need set new password next login
-        need_change_password if self.last_password_reset.nil?
+        # set a fake datetime so a password change is needed and save the record
+        def need_change_password!
+          if self.class.expire_password_after.is_a? Fixnum
+            need_change_password
+            self.save(:validate => false)
+          end
+        end
 
-        self.last_password_reset
-      end
+        # set a fake datetime so a password change is needed
+        def need_change_password
+          if self.class.expire_password_after.is_a? Fixnum
+            self.last_password_reset = self.class.expire_password_after.ago
+          end
 
-      private
+          # is date not set it will set default to need set new password next login
+          need_change_password if self.last_password_reset.nil?
 
-        # is password changed then update last_password_reset
+          self.last_password_reset
+        end
+
+        private
+
+        # is password changed then update password_cahanged_at
         def update_password_changed
           self.last_password_reset = Time.now if (self.new_record? or self.encrypted_password_changed?) and not self.last_password_reset_changed?
         end
+      end
 
-      module ClassMethods
+      module ClassMethods #:nodoc:
         ::Devise::Models.config(self, :expire_password_after)
       end
     end
-
   end
 
 end
