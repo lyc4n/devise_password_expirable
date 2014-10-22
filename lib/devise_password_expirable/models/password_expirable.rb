@@ -42,7 +42,7 @@ module Devise
 
       private
 
-        # is password changed then update password_cahanged_at
+        # is password changed then update last_password_reset
         def update_password_changed
           self.last_password_reset = Time.now if (self.new_record? or self.encrypted_password_changed?) and not self.last_password_reset_changed?
         end
