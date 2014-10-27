@@ -11,9 +11,6 @@ module Devise # :nodoc:
   mattr_accessor :expire_password_after
   @@expire_password_after = 3.months
 
-  # Validate password for strongness
-  mattr_accessor :password_regex
-  @@password_regex = /^\w*(?=\w*\d)(?=\w*[a-z])(?=\w*[A-Z])\w*$/
 end
 
 # an security extension for devise
