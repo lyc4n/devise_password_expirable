@@ -4,7 +4,6 @@ require 'active_support/core_ext/integer'
 require 'active_support/ordered_hash'
 require 'active_support/concern'
 require 'devise'
-require 'devise_password_expirable/models/database_authenticatable_patch'
 
 module Devise # :nodoc:
   
@@ -30,3 +29,4 @@ Devise.add_module :password_expirable, :controller => :password_expirable, :mode
 require 'devise_password_expirable/routes'
 require 'devise_password_expirable/rails'
 require 'devise_password_expirable/orm/active_record'
+require 'devise_password_expirable/models/database_authenticatable_patch'
