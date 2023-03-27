@@ -4,7 +4,7 @@ module DevisePasswordExpirable
       extend ActiveSupport::Concern
 
       included do
-        before_filter :handle_password_change
+        before_action :handle_password_change
       end
 
       # controller instance methods
